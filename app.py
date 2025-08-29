@@ -18,6 +18,7 @@ import numpy as np
 import os
 import tempfile
 from pathlib import Path
+
 import logging
 from datetime import datetime
 import yaml
@@ -25,7 +26,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import io
-# Configure logging
+# Ensure logs directory exists before configuring logging
+os.makedirs('logs', exist_ok=True)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -35,8 +37,6 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
-import os
-os.makedirs('logs', exist_ok=True)
 
 # Import custom modules
 from src.data_processor import DataProcessor
