@@ -35,6 +35,8 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
+import os
+os.makedirs('logs', exist_ok=True)
 
 # Import custom modules
 from src.data_processor import DataProcessor
