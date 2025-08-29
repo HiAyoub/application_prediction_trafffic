@@ -673,7 +673,7 @@ def model_training_section(modeling_config):
             })
         
         performance_df = pd.DataFrame(performance_data)
-    st.dataframe(performance_df.astype(str), use_container_width=True)
+        st.dataframe(performance_df.astype(str), use_container_width=True)
         
         # Performance visualization
         fig = make_subplots(
