@@ -228,7 +228,7 @@ def data_upload_section(preprocessing_config):
         df_preview = df.copy()
         if 'geometry' in df_preview.columns:
             df_preview['geometry'] = df_preview['geometry'].apply(lambda g: g.wkt if hasattr(g, 'wkt') else str(g))
-        st.dataframe(df_preview.head(10), use_container_width=True)
+    st.dataframe(df_preview.head(10).astype(str), use_container_width=True)
         col1, col2, col3 = st.columns(3)
         with col1:
             st.metric("Total des lignes", len(df))
@@ -299,7 +299,7 @@ def data_upload_section(preprocessing_config):
         
         # Display file information
         info_df = pd.DataFrame(file_info)
-        st.dataframe(info_df, use_container_width=True)
+    st.dataframe(info_df.astype(str), use_container_width=True)
         
         if valid_files:
             st.success(f"✅ {len(valid_files)} fichier(s) valide(s) prêt(s) à être traité(s)")
@@ -321,7 +321,7 @@ def data_upload_section(preprocessing_config):
             df_preview = selected_df.copy()
             if 'geometry' in df_preview.columns:
                 df_preview['geometry'] = df_preview['geometry'].apply(lambda g: g.wkt if hasattr(g, 'wkt') else str(g))
-            st.dataframe(df_preview.head(10), use_container_width=True)
+            st.dataframe(df_preview.head(10).astype(str), use_container_width=True)
             
             # Data statistics
             col1, col2, col3 = st.columns(3)
@@ -673,7 +673,7 @@ def model_training_section(modeling_config):
             })
         
         performance_df = pd.DataFrame(performance_data)
-        st.dataframe(performance_df, use_container_width=True)
+    st.dataframe(performance_df.astype(str), use_container_width=True)
         
         # Performance visualization
         fig = make_subplots(
@@ -1631,7 +1631,7 @@ def fusion_debits_fcd_section():
             # 1. Lecture des débits
             df_debits_brut = safe_read_any_table(file_debits, sep=';')
             st.subheader("Aperçu du fichier de débits brut")
-            st.dataframe(df_debits_brut.head(10), use_container_width=True)
+            st.dataframe(df_debits_brut.head(10).astype(str), use_container_width=True)
             # Vérification de la période sélectionnée par rapport aux données disponibles
             annees_disponibles = df_debits_brut['periode'].apply(lambda x: pd.to_datetime(x).year).unique()
             mois_disponibles = df_debits_brut['periode'].apply(lambda x: pd.to_datetime(x).month).unique()
@@ -1649,7 +1649,7 @@ def fusion_debits_fcd_section():
                 st.error("❌ La période sélectionnée (année/mois) n'existe pas dans le fichier de débits. Veuillez choisir une période valide.")
                 return
             st.subheader("Aperçu du fichier de débits après calcul de la moyenne horaire")
-            st.dataframe(df_debits.head(10), use_container_width=True)
+            st.dataframe(df_debits.head(10).astype(str), use_container_width=True)
 
             # 2. Lecture du fichier de correspondance
             df_fcd_corresp = safe_read_any_table(file_fcd_corresp)
@@ -1664,7 +1664,7 @@ def fusion_debits_fcd_section():
             # Évite le produit cartésien lors du merge
             df_fcd_corresp = df_fcd_corresp.drop_duplicates(subset='Id')
             st.subheader("Aperçu du fichier de correspondance FCD/Capteurs (colonnes filtrées et renommées)")
-            st.dataframe(df_fcd_corresp.head(10), use_container_width=True)
+            st.dataframe(df_fcd_corresp.head(10).astype(str), use_container_width=True)
 
             # 3. Lecture du fichier SHP
             gdf_shp = None
@@ -1685,7 +1685,7 @@ def fusion_debits_fcd_section():
                         cols.append('StreetName')
                     gdf_shp = gdf_tmp[cols]
                     st.subheader("Aperçu du fichier SHP")
-                    st.dataframe(gdf_shp.head(10), use_container_width=True)
+                    st.dataframe(gdf_shp.head(10).astype(str), use_container_width=True)
 
             # 4. Lecture des fichiers FCD
             with tempfile.TemporaryDirectory() as tmpdir:
@@ -1717,7 +1717,7 @@ def fusion_debits_fcd_section():
                     if ('capteur' not in df_fcd_final.columns or 'zone' not in df_fcd_final.columns) and not df_fcd_corresp.empty:
                         df_fcd_final = df_fcd_final.merge(df_fcd_corresp, on='Id', how='left')
                     st.subheader("Aperçu du dataset FCD concaténé")
-                    st.dataframe(df_fcd_final.head(10), use_container_width=True)
+                    st.dataframe(df_fcd_final.head(10).astype(str), use_container_width=True)
 
                 # 5. Fusion finale
                 if df_fcd_final is not None and not df_debits.empty:
@@ -1731,11 +1731,11 @@ def fusion_debits_fcd_section():
                         debit_cols_to_keep = debit_cols_base + [col for col in debit_cols if col in df_debits.columns]
                         df_debits_fcd = df_debits[debit_cols_to_keep].copy() if all(col in df_debits.columns for col in debit_cols_to_keep) else df_debits.copy()
                         st.subheader("Aperçu du fichier de débits filtré pour les heures FCD")
-                        st.dataframe(df_debits_fcd.head(10), use_container_width=True)
+                        st.dataframe(df_debits_fcd.head(10).astype(str), use_container_width=True)
                         df_fusion = fusionner_debits_fcd(df_fcd_final, df_debits_fcd)
                         df_fusion = df_fusion[df_fusion['heure'].isin(heures_fcd_uniques)]
                         st.subheader("Aperçu du dataset fusionné final")
-                        st.dataframe(df_fusion.head(10), use_container_width=True)
+                        st.dataframe(df_fusion.head(10).astype(str), use_container_width=True)
                         # Message utilisateur selon la taille du fichier fusionné
                         if df_fusion is not None:
                             nb_lignes = len(df_fusion)
@@ -1768,7 +1768,7 @@ def fusion_debits_fcd_section():
                 df_preview = df_fusion.copy()
                 if 'geometry' in df_preview.columns:
                     df_preview['geometry'] = df_preview['geometry'].apply(lambda g: g.wkt if hasattr(g, 'wkt') else str(g))
-                st.dataframe(df_preview.head(20), use_container_width=True)
+                st.dataframe(df_preview.head(20).astype(str), use_container_width=True)
                 st.download_button(
                     "Télécharger le dataset fusionné (CSV)",
                     data=df_fusion.to_csv(index=False).encode('utf-8'),
