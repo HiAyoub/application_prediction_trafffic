@@ -6,3 +6,9 @@ dbfread
 plotly
 chardet
 pyyaml
+scipy
+folium
+branca
+shapely
+scikit-learn
+xgboost
