@@ -228,7 +228,7 @@ def data_upload_section(preprocessing_config):
         df_preview = df.copy()
         if 'geometry' in df_preview.columns:
             df_preview['geometry'] = df_preview['geometry'].apply(lambda g: g.wkt if hasattr(g, 'wkt') else str(g))
-    st.dataframe(df_preview.head(10).astype(str), use_container_width=True)
+        st.dataframe(df_preview.head(10).astype(str), use_container_width=True)
         col1, col2, col3 = st.columns(3)
         with col1:
             st.metric("Total des lignes", len(df))
@@ -299,7 +299,7 @@ def data_upload_section(preprocessing_config):
         
         # Display file information
         info_df = pd.DataFrame(file_info)
-    st.dataframe(info_df.astype(str), use_container_width=True)
+        st.dataframe(info_df.astype(str), use_container_width=True)
         
         if valid_files:
             st.success(f"✅ {len(valid_files)} fichier(s) valide(s) prêt(s) à être traité(s)")
