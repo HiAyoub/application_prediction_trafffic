@@ -1,0 +1,14 @@
+# Ignore default_fusion folder and its contents
+/data/default_fusion/
+/attached_assets
+/logs
+/models
+/reports
+/data/processed/
+/data/uploads/
+/src/__pycache__/
+.replit
+.streamlit/
+deployment_guide.md
+replit.md
+uv.lock

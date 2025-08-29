@@ -1,0 +1,207 @@
+# Traffic Prediction Modeling Configuration
+# ========================================
+
+# Data configuration
+data:
+  input_path: "data/processed/processed_traffic_data.csv"
+  output_dir: "data/processed"
+  save_featured_dataset_path: "data/processed/final_dataset_with_features.csv"
+
+# Feature configuration
+features:
+  target_column: "debit"
+  
+  categorical_features:
+    - "capteur"
+  
+  numerical_features:
+    - "Id"
+    - "AvgTt"
+    - "MedTt"
+    - "ratio"
+    - "AvgSp"
+    - "HvgSp"
+    - "MedSp"
+    - "SdSp"
+    - "Hits"
+    - "P5sp"
+    - "P10sp"
+    - "P15sp"
+    - "P20sp"
+    - "P25sp"
+    - "P30sp"
+    - "P35sp"
+    - "P40sp"
+    - "P45sp"
+    - "P50sp"
+    - "P55sp"
+    - "P60sp"
+    - "P65sp"
+    - "P70sp"
+    - "P75sp"
+    - "P80sp"
+    - "P85sp"
+    - "P90sp"
+    - "P95sp"
+    - "heure"
+    - "zone"
+  
+  time_features:
+    - "hour"
+    - "day_of_week"
+    - "is_weekend"
+    - "month"
+    - "is_rush_hour"
+    - "is_peak"
+  
+  # Feature engineering options
+  create_lag_features: false
+  lag_periods: [1, 2, 3, 24]
+  
+  create_rolling_features: false
+  rolling_windows: [3, 24, 168]  # 3h, 24h, 1 week
+  
+  create_metier_features: true
+  create_speed_features: true
+  create_ratios: true
+  
+  # Feature selection
+  feature_selection_method: "correlation"  # correlation, mutual_info, rfe
+  feature_selection_threshold: 0.01
+  max_features: 50
+
+# Analysis configuration
+exploratory_analysis: true
+generate_feature_importance: true
+
+# Training configuration
+training:
+  test_size: 0.2
+  validation_size: 0.2
+  random_state: 42
+  cv_splits: 5
+  cv_method: "kfold"  # kfold, timeseries
+  
+  # Model output directory
+  model_output_dir: "models"
+  
+  # Scaling and preprocessing
+  scale_features: true
+  handle_categorical: "onehot"  # onehot, label, target
+  
+  # Model configurations
+  models:
+    random_forest:
+      save_model: true
+      params:
+        n_estimators: 100
+        max_depth: 15
+        min_samples_split: 5
+        min_samples_leaf: 2
+        max_features: "sqrt"
+        random_state: 42
+        n_jobs: -1
+    
+    gradient_boosting:
+      save_model: true
+      params:
+        n_estimators: 100
+        max_depth: 8
+        learning_rate: 0.1
+        subsample: 0.8
+        random_state: 42
+    
+    # xgboost:
+    #   save_model: true
+    #   params:
+    #     n_estimators: 100
+    #     max_depth: 8
+    #     learning_rate: 0.1
+    #     subsample: 0.8
+    #     colsample_bytree: 0.8
+    #     random_state: 42
+    #     n_jobs: -1
+    
+    # lightgbm:
+    #   save_model: true
+    #   params:
+    #     n_estimators: 100
+    #     max_depth: 8
+    #     learning_rate: 0.1
+    #     subsample: 0.8
+    #     colsample_bytree: 0.8
+    #     random_state: 42
+    #     n_jobs: -1
+    #     verbose: -1
+    
+    linear_regression:
+      save_model: false
+      params: {}
+    
+    ridge:
+      save_model: false
+      params:
+        alpha: 1.0
+        random_state: 42
+    
+    lasso:
+      save_model: false
+      params:
+        alpha: 1.0
+        random_state: 42
+
+# Evaluation metrics
+evaluation:
+  primary_metric: "rmse"  # rmse, mae, r2
+  metrics:
+    - "mae"
+    - "rmse"
+    - "r2"
+    - "mape"
+  
+  # Cross-validation settings
+  cv_scoring: "neg_mean_squared_error"
+  
+  # Model selection criteria
+  model_selection_criteria: "test_rmse"  # test_rmse, cv_score, test_r2
+
+# Output configuration
+output:
+  results_dir: "results"
+  save_predictions: true
+  save_feature_importance: true
+  save_model_metrics: true
+  save_training_history: true
+  
+  # Visualization outputs
+  generate_plots: true
+  plot_formats: ["html", "png"]
+  
+  # Report generation
+  generate_model_report: true
+  generate_comparison_report: true
+
+# MLflow configuration (optional)
+mlflow:
+  enabled: false
+  tracking_uri: "sqlite:///mlruns.db"
+  experiment_name: "traffic_prediction"
+  
+# Advanced options
+advanced:
+  # Hyperparameter tuning
+  hyperparameter_tuning: false
+  tuning_method: "random_search"  # grid_search, random_search, bayesian
+  tuning_iterations: 50
+  
+  # Ensemble methods
+  create_ensemble: false
+  ensemble_methods: ["voting", "stacking"]
+  
+  # Model interpretability
+  generate_shap_values: false
+  feature_interaction_analysis: false
+  
+  # Production deployment
+  model_versioning: true
+  model_registry: false

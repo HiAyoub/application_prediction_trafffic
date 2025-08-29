@@ -1,0 +1,210 @@
+# Traffic Data Preprocessing Configuration
+# =====================================
+
+# Data source configuration
+input_file: 'data/uploads/traffic_data.csv'
+output_file: 'data/processed/processed_traffic_data.csv'
+
+# Column definitions
+date_columns: []
+numeric_columns: 
+  - 'Id'
+  - 'AvgTt'
+  - 'MedTt'
+  - 'ratio'
+  - 'AvgSp'
+  - 'HvgSp'
+  - 'MedSp'
+  - 'SdSp'
+  - 'Hits'
+  - 'P5sp'
+  - 'P10sp'
+  - 'P15sp'
+  - 'P20sp'
+  - 'P25sp'
+  - 'P30sp'
+  - 'P35sp'
+  - 'P40sp'
+  - 'P45sp'
+  - 'P50sp'
+  - 'P55sp'
+  - 'P60sp'
+  - 'P65sp'
+  - 'P70sp'
+  - 'P75sp'
+  - 'P80sp'
+  - 'P85sp'
+  - 'P90sp'
+  - 'P95sp'
+  - 'heure'
+  - 'mois'
+  - 'annee'
+  - 'zone'
+  - 'debit'
+
+categorical_columns: 
+  - 'capteur'
+
+text_columns: []
+
+required_columns: 
+  - 'Id'
+  - 'capteur'
+  - 'zone'
+  - 'debit'
+  - 'geometry'  # Ajout de la colonne obligatoire geometry
+
+geometry_columns:
+  - 'geometry'  # Type geometry
+
+target_column: 'debit'
+time_column: 'heure'  # Primary time column for temporal operations
+
+# Temporal data processing configuration
+resample:
+  rule: '1H'  # Resampling frequency (1H, 1D, etc.)
+  aggregation:
+    numeric: 'mean'  # Default method for numeric columns
+    categorical: 'mode'  # Method for categorical columns
+
+add_temporal_features: true  # Add temporal features
+detect_temporal_anomalies: false  # Enable anomaly detection
+anomaly_window: '24H'  # Window for anomaly detection
+anomaly_threshold: 3.0  # Z-score threshold for anomalies
+
+# Data quality configuration
+data_quality:
+  min_value:
+    Id: 0
+    AvgTt: 0
+    MedTt: 0
+    ratio: 0
+    AvgSp: 0
+    HvgSp: 0
+    MedSp: 0
+    SdSp: 0
+    Hits: 0
+    P5sp: 0
+    P10sp: 0
+    P15sp: 0
+    P20sp: 0
+    P25sp: 0
+    P30sp: 0
+    P35sp: 0
+    P40sp: 0
+    P45sp: 0
+    P50sp: 0
+    P55sp: 0
+    P60sp: 0
+    P65sp: 0
+    P70sp: 0
+    P75sp: 0
+    P80sp: 0
+    P85sp: 0
+    P90sp: 0
+    P95sp: 0
+    heure: 0
+    zone: 0
+    debit: 0
+
+  max_value:
+    Id: 1000000
+    AvgTt: 10000
+    MedTt: 10000
+    ratio: 1.5
+    AvgSp: 200
+    HvgSp: 200
+    MedSp: 200
+    SdSp: 100
+    Hits: 100000
+    P5sp: 200
+    P10sp: 200
+    P15sp: 200
+    P20sp: 200
+    P25sp: 200
+    P30sp: 200
+    P35sp: 200
+    P40sp: 200
+    P45sp: 200
+    P50sp: 200
+    P55sp: 200
+    P60sp: 200
+    P65sp: 200
+    P70sp: 200
+    P75sp: 200
+    P80sp: 200
+    P85sp: 200
+    P90sp: 200
+    P95sp: 200
+    heure: 23
+    zone: 1000
+    debit: 10000
+
+  allowed_values:
+    capteur: 
+      - 'CT1'
+      - 'CT2'
+      - 'CT3'
+      - 'CT4'
+      - 'CT5'
+      - 'CT6'
+      - 'CT7'
+      - 'CT8'
+      - 'CT9'
+      - 'CT10'
+      - 'CT11'
+      - 'CT12'
+      - 'CT13'
+      - 'CT14'
+      - 'CT15'
+      - 'CT16'
+      - 'CT17'
+      - 'CT18'
+      - 'CT19'
+      - 'CT20'
+      - 'CT21'
+      - 'CT22'
+      - 'CT23'
+      - 'CT24'
+      - 'CT25'
+      - 'CT26'
+      - 'CT27'
+      - 'CT28'
+      - 'CT29'
+      - 'CT30'
+
+  unique_threshold:
+    Id: 0.99
+
+  missing_rate:
+    geometry: 0  # Taux de valeurs manquantes autorisé pour geometry
+
+# Data drift detection configuration
+drift:
+  test_size: 0.2
+  random_state: 42
+  threshold: 0.05  # p-value threshold for drift detection
+  reference_data_path: 'data/reference/reference_traffic_data.csv'
+
+# Visualization configuration
+visualization:
+  quality_report: true
+  drift_report: true
+  temporal_analysis: true
+  output_dir: 'reports'
+
+# Feature engineering configuration
+feature_engineering:
+  create_speed_features: true
+  create_ratios: true
+  create_traffic_density: true
+  create_time_features: true
+  create_zone_features: true
+  create_sensor_features: true
+
+# Preprocessing options
+preprocessing_options:
+  handle_missing_values: true
+  remove_outliers: false
+  normalize_features: false
+  feature_selection: false
