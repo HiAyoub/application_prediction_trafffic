@@ -5,3 +5,4 @@ geopandas
 dbfread
 plotly
 chardet
+pyyaml
